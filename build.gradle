@@ -26,6 +26,12 @@ description = "Atlas Checks"
 sourceCompatibility = 11
 targetCompatibility = 11
 
+//compileJava {
+//    options.forkOptions.jvmArgs.addAll( ['--add-opens', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED'] )
+//    options.forkOptions.jvmArgs.addAll( ['--add-opens', 'java.base/java.nio=ALL-UNNAMED'] )
+//    options.forkOptions.jvmArgs.addAll( ['--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED'] )
+//}
+
 repositories
 {
     // For geotools
@@ -47,6 +53,15 @@ repositories
 
 configurations
 {
+//    tasks.withType( JavaCompile ).configureEach {
+//        options.forkOptions.jvmArgs.addAll( ['--add-opens', 'jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED'] )
+//    }
+    tasks.withType(Javadoc) {
+        failOnError false
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+        options.addStringOption('charSet', 'UTF-8')
+    }
     all {
         resolutionStrategy {
             // Force the version compatible with the latest version
@@ -171,5 +186,8 @@ gradle.startParameter.excludedTaskNames += skippedTaskNames
 idea {
     project {
         languageLevel = '11'
+        tasks.withType(JavaCompile) {
+            options.encoding = 'UTF-8'
+        }
     }
 }
